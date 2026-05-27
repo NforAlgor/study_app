@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import NotificationSettings from "../components/NotificationSettings";
 import { getProfile, updateProfile, changePassword } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { User, Lock, CheckCircle, Clock, BarChart3, LogOut } from "lucide-react";
@@ -210,6 +211,9 @@ export default function Profile() {
               </button>
             </form>
           </div>
+
+          {/* Notification Settings */}
+          <NotificationSettings />
         </div>
       </div>
     </Layout>

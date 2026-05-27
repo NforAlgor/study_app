@@ -15,7 +15,8 @@ API.interceptors.request.use((config) => {
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 403 || error.response?.status === 401) {
+    const token = localStorage.getItem("ssp_token");
+    if ((error.response?.status === 403 || error.response?.status === 401) && token) {
       localStorage.removeItem("ssp_token");
       localStorage.removeItem("ssp_user");
       window.location.href = "/login";

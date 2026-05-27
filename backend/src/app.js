@@ -6,10 +6,11 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/auth",    require("./routes/authRoutes"));
-app.use("/api/tasks",   require("./routes/taskRoutes"));
-app.use("/api/planner", require("./routes/plannerRoutes"));
-app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/auth",          require("./routes/authRoutes"));
+app.use("/api/tasks",         require("./routes/taskRoutes"));
+app.use("/api/planner",       require("./routes/plannerRoutes"));
+app.use("/api/profile",       require("./routes/profileRoutes"));
+app.use("/api/notifications", require("./routes/notificationRoutes"));
 
 // Health check
 app.get("/", (req, res) => {
