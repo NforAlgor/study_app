@@ -1,0 +1,103 @@
+services:
+
+  # ───────────────────────────────
+  # MySQL Database
+  # ───────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: ssp_db
+    restart: unless-stopped
+
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    # Port 3306 intentionally not exposed — backend connects internally via Docker network
+
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+    networks:
+      - ssp_network
+
+  # ───────────────────────────────
+  # Backend (Node.js / Express)
+  # ───────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: ssp_backend
+    restart: unless-stopped
+
+    ports:
+      - "5000:5000"
+
+    environment:
+      PORT: ${PORT}
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      EMAIL_FROM: ${EMAIL_FROM}
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
+      FRONTEND_URL: ${FRONTEND_URL}
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    networks:
+      - ssp_network
+
+  # ───────────────────────────────
+  # Frontend (React + Nginx)
+  # ───────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+
+    container_name: ssp_frontend
+    restart: unless-stopped
+
+    ports:
+      - "3000:80"
+
+    depends_on:
+      - backend
+
+    networks:
+      - ssp_network
+
+# ───────────────────────────────
+# Networks
+# ───────────────────────────────
+networks:
+  ssp_network:
+    driver: bridge
+
+# ───────────────────────────────
+# Volumes
+# ───────────────────────────────
+volumes:
+  db_data:
+    driver: local

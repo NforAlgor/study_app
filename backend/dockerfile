@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────
+#  Stage 1: Install dependencies
+# ─────────────────────────────────────────────────────────
+FROM node:20-alpine AS deps  
+
+WORKDIR /app
+
+# Copy only package files first (better layer caching)
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# ─────────────────────────────────────────────────────────
+#  Stage 2: Runtime image
+# ─────────────────────────────────────────────────────────
+FROM node:20-alpine 
+
+# Add curl for healthcheck
+RUN apk add --no-cache curl
+
+WORKDIR /app
+
+# Copy installed node_modules from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy application source
+COPY . .
+
+# Don't run as root
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+EXPOSE 5000
+
+# Healthcheck: ping the backend health endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:5000/ || exit 1
+
+CMD ["node", "server.js"]
