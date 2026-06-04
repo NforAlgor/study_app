@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import NotificationSettings from "../components/NotificationSettings";
-import { getProfile, updateProfile, changePassword } from "../services/api";
+import { getProfile, updateProfile, changePassword, getTasks } from "../services/api";
 import { useAuth } from "../context/AuthContext";
-import { User, Lock, CheckCircle, Clock, BarChart3, LogOut } from "lucide-react";
+import { User, Lock, CheckCircle, Clock, BarChart3, LogOut, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,7 @@ export default function Profile() {
 
   const [stats, setStats]   = useState(null);
   const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState([]);
 
   const [profileForm, setProfileForm] = useState({ name: "", email: "" });
   const [profileLoading, setProfileLoading] = useState(false);
@@ -23,9 +24,10 @@ export default function Profile() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await getProfile();
-        setStats(res.data.stats);
-        setProfileForm({ name: res.data.user.name, email: res.data.user.email });
+        const [profileRes, tasksRes] = await Promise.all([getProfile(), getTasks()]);
+        setStats(profileRes.data.stats);
+        setProfileForm({ name: profileRes.data.user.name, email: profileRes.data.user.email });
+        setTasks(tasksRes.data.tasks);
       } catch {
         toast.error("Could not load profile");
       } finally {
@@ -34,6 +36,10 @@ export default function Profile() {
     };
     load();
   }, []);
+
+  const today = new Date();
+  const notCompleted = tasks.filter(t => t.status !== "completed" && new Date(t.deadline) < today).length;
+  const pendingActive = tasks.filter(t => t.status === "pending" && new Date(t.deadline) >= today).length;
 
   const handleProfileSave = async (e) => {
     e.preventDefault();
@@ -107,8 +113,8 @@ export default function Profile() {
                 {[
                   { label: "Total Tasks",   value: stats.total_tasks,      icon: BarChart3,   color: "text-accent"    },
                   { label: "Completed",     value: stats.completed_tasks,  icon: CheckCircle, color: "text-green-600" },
-                  { label: "In Progress",   value: stats.in_progress_tasks,icon: Clock,       color: "text-blue-600"  },
-                  { label: "Pending",       value: stats.pending_tasks,    icon: Clock,       color: "text-amber-600" },
+                  { label: "Not Completed", value: notCompleted,           icon: XCircle,     color: "text-red-600"   },
+                  { label: "Pending",       value: pendingActive,          icon: Clock,       color: "text-amber-600" },
                 ].map(s => (
                   <div key={s.label} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

@@ -82,9 +82,14 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
           {task.status !== "completed" && (
             <>
               <button
-                onClick={() => onComplete(task.id)}
-                title="Mark complete"
-                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-green-50 text-green-600 transition-colors"
+                onClick={() => !isOverdue && onComplete(task.id)}
+                title={isOverdue ? "Deadline passed" : "Mark complete"}
+                disabled={isOverdue}
+                className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors ${
+                  isOverdue
+                    ? "text-red-300 cursor-not-allowed"
+                    : "hover:bg-green-50 text-green-600"
+                }`}
               >
                 <CheckCircle2 size={16} />
               </button>

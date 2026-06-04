@@ -4,7 +4,7 @@ import { getTasks } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import Layout from "../components/Layout";
 import {
-  CheckSquare, Clock, AlertCircle, TrendingUp,
+  CheckSquare, Clock, AlertCircle, TrendingUp, XCircle,
   CalendarClock, ArrowRight, Timer, Brain, RefreshCw,
   FileText, BookOpen, Book
 } from "lucide-react";
@@ -29,12 +29,12 @@ export default function Dashboard() {
     load();
   }, []);
 
+  const today = new Date(); today.setHours(0,0,0,0);
+
   const total     = tasks.length;
   const completed = tasks.filter(t => t.status === "completed").length;
-  const pending   = tasks.filter(t => t.status === "pending").length;
-  const inProg    = tasks.filter(t => t.status === "in_progress").length;
-
-  const today = new Date(); today.setHours(0,0,0,0);
+  const pending   = tasks.filter(t => t.status === "pending" && new Date(t.deadline) >= today).length;
+  const notCompleted = tasks.filter(t => t.status !== "completed" && new Date(t.deadline) < today).length;
   const dueSoon = tasks.filter(t => {
     const d = new Date(t.deadline);
     const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
@@ -46,7 +46,7 @@ export default function Dashboard() {
   const stats = [
     { label: "Total Tasks",   value: total,     icon: CheckSquare, color: "bg-accent-light text-accent"     },
     { label: "Pending",       value: pending,   icon: Clock,       color: "bg-amber-50 text-amber-600"      },
-    { label: "In Progress",   value: inProg,    icon: AlertCircle, color: "bg-blue-50 text-blue-600"        },
+    { label: "Not Completed", value: notCompleted, icon: XCircle,   color: "bg-red-50 text-red-600"          },
     { label: "Completed",     value: completed, icon: TrendingUp,  color: "bg-green-50 text-green-600"      },
   ];
 

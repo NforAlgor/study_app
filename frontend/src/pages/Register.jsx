@@ -31,22 +31,18 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md">
-          {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-              <BookOpen size={16} className="text-white" />
+    <div className="min-h-screen bg-surface flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        <div className="card px-8 py-10">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center mb-4">
+              <BookOpen size={22} className="text-white" />
             </div>
-            <span className="font-display font-bold text-lg text-ink">StudyFlow</span>
+            <h2 className="font-display font-bold text-2xl text-ink">Create your account</h2>
+            <p className="text-ink-muted text-sm mt-1">Start planning smarter today — it's free.</p>
           </div>
 
-          <div className="mb-8">
-            <h2 className="font-display font-bold text-3xl text-ink mb-2">Create your account</h2>
-            <p className="text-ink-muted">Start planning smarter today — it's free.</p>
-          </div>
-
-          <form onSubmit={submit} className="space-y-4">
+          <form onSubmit={submit} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-ink mb-1.5">Full Name</label>
               <input
@@ -94,7 +90,7 @@ export default function Register() {
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 mt-2">
+            <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
               {loading ? (
                 <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
@@ -110,6 +106,7 @@ export default function Register() {
             </Link>
           </p>
         </div>
+      </div>
     </div>
   );
 }
