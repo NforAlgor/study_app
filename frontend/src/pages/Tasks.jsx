@@ -85,6 +85,7 @@ export default function Tasks() {
   const countFor = (f) => {
     if (f === "all") return tasks.length;
     if (f === "not_completed") return tasks.filter(isNotCompleted).length;
+    if (f === "pending") return tasks.filter(t => t.status === "pending" && !isNotCompleted(t)).length;
     return tasks.filter(t => t.status === f).length;
   };
 
@@ -93,6 +94,7 @@ export default function Tasks() {
     .filter(t => {
       if (filter === "all") return true;
       if (filter === "not_completed") return isNotCompleted(t);
+      if (filter === "pending") return t.status === "pending" && !isNotCompleted(t);
       return t.status === filter;
     })
     .filter(t => t.title.toLowerCase().includes(search.toLowerCase()))
