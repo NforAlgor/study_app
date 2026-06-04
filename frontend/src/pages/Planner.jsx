@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { generatePlan } from "../services/api";
-import { Zap, RefreshCw, Trophy, AlertTriangle } from "lucide-react";
+import { Zap, RefreshCw, Trophy, AlertTriangle, Medal, Star, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
 
 const importanceLabel = { 1: "Low", 2: "Medium", 3: "High" };
@@ -74,7 +74,7 @@ export default function Planner() {
         </div>
       ) : plan.length === 0 ? (
         <div className="card text-center py-16 animate-fade-up">
-          <p className="text-4xl mb-3">🗓️</p>
+          <Calendar size={36} className="text-ink-muted mx-auto mb-3" />
           <p className="font-display font-semibold text-ink text-lg">No pending tasks</p>
           <p className="text-ink-muted text-sm mt-1">
             Add tasks on the Tasks page and come back to see your plan.
@@ -102,7 +102,7 @@ export default function Planner() {
                     }`}
                   >
                     {task.rank <= 3 ? (
-                      task.rank === 1 ? "🥇" : task.rank === 2 ? "🥈" : "🥉"
+                      task.rank === 1 ? <Trophy size={16} /> : task.rank === 2 ? <Medal size={16} /> : <Star size={16} />
                     ) : (
                       `#${task.rank}`
                     )}
@@ -133,7 +133,7 @@ export default function Planner() {
                     {/* Meta row */}
                     <div className="flex flex-wrap gap-2 mb-3">
                       <span className="badge bg-surface text-ink-muted">
-                        📅 {task.days_left === 0 ? "Due today" : isUrgent ? `${task.days_left}d — urgent!` : `${task.days_left} days left`}
+                        {task.days_left === 0 ? "Due today" : isUrgent ? `${task.days_left}d — urgent!` : `${task.days_left} days left`}
                       </span>
                       <span className="badge bg-surface text-ink-muted">
                         Importance: {importanceLabel[task.importance]}

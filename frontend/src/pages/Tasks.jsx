@@ -3,11 +3,11 @@ import Layout from "../components/Layout";
 import TaskCard from "../components/TaskCard";
 import TaskModal from "../components/TaskModal";
 import { getTasks, createTask, updateTask, deleteTask, markComplete } from "../services/api";
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
+import { Plus, Search, SlidersHorizontal, ClipboardList } from "lucide-react";
 import toast from "react-hot-toast";
 
-const FILTERS = ["all", "pending", "in_progress", "completed"];
-const filterLabel = { all: "All", pending: "Pending", in_progress: "In Progress", completed: "Completed" };
+const FILTERS = ["all", "pending", "completed", "not_completed"];
+const filterLabel = { all: "All", pending: "Pending", completed: "Completed", not_completed: "Not Completed" };
 
 export default function Tasks() {
   const [tasks, setTasks]       = useState([]);
@@ -62,7 +62,7 @@ export default function Tasks() {
   const handleComplete = async (id) => {
     try {
       await markComplete(id);
-      toast.success("Marked as completed 🎉");
+      toast.success("Marked as completed!");
       load();
     } catch {
       toast.error("Could not update task");
@@ -79,9 +79,22 @@ export default function Tasks() {
     setModalOpen(true);
   };
 
+  const today = new Date();
+  const isNotCompleted = (t) => t.status !== "completed" && new Date(t.deadline) < today;
+
+  const countFor = (f) => {
+    if (f === "all") return tasks.length;
+    if (f === "not_completed") return tasks.filter(isNotCompleted).length;
+    return tasks.filter(t => t.status === f).length;
+  };
+
   // Filter + search + sort
   const visible = tasks
-    .filter(t => filter === "all" || t.status === filter)
+    .filter(t => {
+      if (filter === "all") return true;
+      if (filter === "not_completed") return isNotCompleted(t);
+      return t.status === filter;
+    })
     .filter(t => t.title.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => {
       if (sortBy === "deadline") return new Date(a.deadline) - new Date(b.deadline);
@@ -149,7 +162,7 @@ export default function Tasks() {
           >
             {filterLabel[f]}
             <span className="ml-1.5 text-xs opacity-70">
-              ({f === "all" ? tasks.length : tasks.filter(t => t.status === f).length})
+              ({countFor(f)})
             </span>
           </button>
         ))}
@@ -162,7 +175,7 @@ export default function Tasks() {
         </div>
       ) : visible.length === 0 ? (
         <div className="card text-center py-16 animate-fade-up">
-          <p className="text-4xl mb-3">📋</p>
+          <ClipboardList size={40} className="text-ink-muted mx-auto mb-3" />
           <p className="font-display font-semibold text-ink text-lg">No tasks found</p>
           <p className="text-ink-muted text-sm mt-1 mb-4">
             {search ? "Try a different search term" : "Add your first task to get started"}

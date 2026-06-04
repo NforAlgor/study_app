@@ -5,7 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import Layout from "../components/Layout";
 import {
   CheckSquare, Clock, AlertCircle, TrendingUp,
-  CalendarClock, ArrowRight
+  CalendarClock, ArrowRight, Timer, Brain, RefreshCw,
+  FileText, BookOpen, Book
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -105,7 +106,7 @@ export default function Dashboard() {
           <p className="text-xs text-ink-muted mt-3">
             {pending > 0
               ? `${pending} task${pending > 1 ? "s" : ""} still need attention`
-              : "All caught up! 🎉"}
+              : "All caught up!"}
           </p>
         </div>
 
@@ -116,7 +117,7 @@ export default function Dashboard() {
             <span className="badge bg-red-50 text-red-600">{dueSoon.length} tasks</span>
           </div>
           {dueSoon.length === 0 ? (
-            <p className="text-ink-muted text-sm">No urgent deadlines in the next 3 days. 🟢</p>
+            <p className="text-ink-muted text-sm">No urgent deadlines in the next 3 days.</p>
           ) : (
             <div className="space-y-2.5">
               {dueSoon.map(t => {
@@ -181,37 +182,37 @@ export default function Dashboard() {
               name: "Pomodoro Technique",
               desc: "Work in focused 25-minute intervals with 5-minute breaks. After 4 cycles, take a longer 15-30 min break.",
               color: "bg-red-50 text-red-600",
-              icon: "⏱️",
+              icon: Timer,
             },
             {
               name: "Active Recall",
               desc: "Test yourself on the material instead of passively re-reading. Close the book and explain concepts from memory.",
               color: "bg-blue-50 text-blue-600",
-              icon: "🧠",
+              icon: Brain,
             },
             {
               name: "Spaced Repetition",
               desc: "Review material at increasing intervals (1 day, 3 days, 1 week, 1 month) to move knowledge into long-term memory.",
               color: "bg-green-50 text-green-600",
-              icon: "🔄",
+              icon: RefreshCw,
             },
             {
               name: "Feynman Technique",
               desc: "Explain a concept in simple terms as if teaching a child. If you can't explain it simply, you don't understand it well enough.",
               color: "bg-purple-50 text-purple-600",
-              icon: "📝",
+              icon: FileText,
             },
             {
               name: "Cornell Method",
               desc: "Divide your notes into cues, notes, and summary sections. Review cues to test yourself on the material.",
               color: "bg-amber-50 text-amber-600",
-              icon: "📑",
+              icon: BookOpen,
             },
             {
               name: "SQ3R Method",
               desc: "Survey, Question, Read, Recite, Review. A five-step strategy for efficient reading and comprehension of textbooks.",
               color: "bg-pink-50 text-pink-600",
-              icon: "📖",
+              icon: Book,
             },
           ].map((t, i) => (
             <div
@@ -220,7 +221,7 @@ export default function Dashboard() {
               style={{ animationDelay: `${i * 60}ms` }}
             >
               <div className="flex items-start gap-3">
-                <span className="text-xl">{t.icon}</span>
+                <t.icon size={20} className={`${t.color} flex-shrink-0 mt-0.5`} />
                 <div>
                   <h3 className="font-display font-semibold text-sm text-ink mb-1">{t.name}</h3>
                   <p className="text-xs text-ink-muted leading-relaxed">{t.desc}</p>
