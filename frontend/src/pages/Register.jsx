@@ -31,50 +31,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex">
-      {/* Left Panel */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-ink p-12">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-accent rounded-xl flex items-center justify-center">
-            <BookOpen size={18} className="text-white" />
-          </div>
-          <span className="font-display font-bold text-xl text-white tracking-tight">StudyFlow</span>
-        </div>
-
-        <div>
-          <div className="mb-8">
-            <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm text-white/70 mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-ssp inline-block" />
-              AI-Powered Study Planner
-            </div>
-            <h1 className="font-display font-bold text-4xl text-white leading-tight mb-4">
-              Study smarter,<br />not harder.
-            </h1>
-            <p className="text-white/60 text-lg leading-relaxed">
-              Let our AI scheduling engine prioritise your tasks by deadline,<br />difficulty, and importance — automatically.
-            </p>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { value: "2×", label: "Faster revision" },
-              { value: "98%", label: "Task completion" },
-              { value: "AI", label: "Smart scheduling" },
-            ].map((s) => (
-              <div key={s.label} className="bg-white/5 rounded-2xl p-4 border border-white/10">
-                <p className="font-display font-bold text-2xl text-white">{s.value}</p>
-                <p className="text-white/50 text-xs mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <p className="text-white/30 text-sm">© 2025 StudyFlow. Built for serious students.</p>
-      </div>
-
-      {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-surface flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-8 lg:hidden">
@@ -153,7 +110,6 @@ export default function Register() {
             </Link>
           </p>
         </div>
-      </div>
     </div>
   );
 }

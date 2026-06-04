@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { generatePlan } from "../services/api";
-import { Zap, RefreshCw, Trophy, AlertTriangle, Info } from "lucide-react";
+import { Zap, RefreshCw, Trophy, AlertTriangle } from "lucide-react";
 import toast from "react-hot-toast";
 
 const importanceLabel = { 1: "Low", 2: "Medium", 3: "High" };
@@ -52,7 +52,7 @@ export default function Planner() {
             <Zap size={22} className="text-accent" /> Study Planner
           </h1>
           <p className="text-ink-muted text-sm mt-0.5">
-            AI-generated priority order based on deadline, difficulty and importance.
+            Priority order based on deadline, difficulty and importance.
           </p>
         </div>
         <button
@@ -63,22 +63,6 @@ export default function Planner() {
           <RefreshCw size={15} className={refreshing ? "animate-spin" : ""} />
           Refresh
         </button>
-      </div>
-
-      {/* Algorithm explainer */}
-      <div className="card bg-accent-light border-accent/20 mb-6 animate-fade-up" style={{ animationDelay: "40ms" }}>
-        <div className="flex items-start gap-3">
-          <Info size={18} className="text-accent mt-0.5 flex-shrink-0" />
-          <div>
-            <p className="text-sm font-medium text-accent mb-0.5">How scoring works</p>
-            <p className="text-sm text-ink-muted font-mono">
-              score = (deadline_weight × 0.5) + (difficulty × 0.3) + (importance × 0.2)
-            </p>
-            <p className="text-xs text-ink-muted mt-1">
-              Higher score = study this first. Deadline urgency has the biggest weight.
-            </p>
-          </div>
-        </div>
       </div>
 
       {loading ? (

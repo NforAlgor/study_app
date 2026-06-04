@@ -30,48 +30,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex">
-      {/* Left Panel */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-ink p-12">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-accent rounded-xl flex items-center justify-center">
-            <BookOpen size={18} className="text-white" />
-          </div>
-          <span className="font-display font-bold text-xl text-white tracking-tight">StudyFlow</span>
-        </div>
-
-        <div>
-          {/* Decorative task preview */}
-          <div className="space-y-3 mb-10">
-            {[
-              { title: "Algorithms Final Exam", score: 2.9, days: 2, color: "bg-red-500" },
-              { title: "Software Engineering Report", score: 2.3, days: 5, color: "bg-amber-500" },
-              { title: "Database Lab Practicals", score: 1.8, days: 8, color: "bg-blue-500" },
-            ].map((t) => (
-              <div key={t.title} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-                <div className={`w-2 h-2 rounded-full ${t.color} flex-shrink-0`} />
-                <div className="flex-1">
-                  <p className="text-white text-sm font-medium">{t.title}</p>
-                  <p className="text-white/40 text-xs">Priority score: {t.score}</p>
-                </div>
-                <span className="text-white/50 text-xs">{t.days}d left</span>
-              </div>
-            ))}
-          </div>
-
-          <h1 className="font-display font-bold text-4xl text-white leading-tight mb-4">
-            Your AI study<br />plan awaits.
-          </h1>
-          <p className="text-white/60 text-lg">
-            Log in to see your personalised priority schedule.
-          </p>
-        </div>
-
-        <p className="text-white/30 text-sm">© 2025 StudyFlow. Built for serious students.</p>
-      </div>
-
-      {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-surface flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-8 lg:hidden">
@@ -138,7 +97,6 @@ export default function Login() {
             </Link>
           </p>
         </div>
-      </div>
     </div>
   );
 }

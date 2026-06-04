@@ -1,4 +1,4 @@
-import { Trash2, Pencil, CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import { Trash2, Pencil, CheckCircle2, Clock, AlertCircle, XCircle } from "lucide-react";
 
 const importanceLabel = { 1: "Low", 2: "Medium", 3: "High" };
 const difficultyLabel = { 1: "Easy", 2: "Medium", 3: "Hard" };
@@ -24,6 +24,7 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
   const today = new Date(); today.setHours(0,0,0,0);
   const daysLeft = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
   const isOverdue = daysLeft < 0 && task.status !== "completed";
+  const isNotCompleted = isOverdue && task.status === "in_progress";
 
   return (
     <div
@@ -34,7 +35,7 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            {statusIcon[task.status]}
+            {isNotCompleted ? <XCircle size={14} className="text-red-500" /> : statusIcon[task.status]}
             <h3
               className={`font-display font-semibold text-base text-ink truncate ${
                 task.status === "completed" ? "line-through text-ink-muted" : ""
@@ -42,6 +43,9 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
             >
               {task.title}
             </h3>
+            {isNotCompleted && (
+              <span className="badge bg-red-50 text-red-600 text-xs font-medium">Not Completed</span>
+            )}
           </div>
 
           <div className="flex flex-wrap items-center gap-2 mt-2">

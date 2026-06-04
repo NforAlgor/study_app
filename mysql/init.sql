@@ -1,8 +1,4 @@
--- ─────────────────────────────────────────────────────────
---  Smart Study Planner — Database Initialisation
---  This file runs automatically when the MySQL container
---  starts for the first time (mounted as /docker-entrypoint-initdb.d/)
--- ─────────────────────────────────────────────────────────
+
 
 CREATE DATABASE IF NOT EXISTS smart_study_planner
   CHARACTER SET utf8mb4
