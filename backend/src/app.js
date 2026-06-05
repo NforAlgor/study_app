@@ -2,7 +2,15 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-app.use(cors());
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:5173",
+  process.env.FRONTEND_URL_2,
+].filter(Boolean);
+
+app.use(cors({
+  origin: allowedOrigins.length > 0 ? allowedOrigins : true,
+  credentials: true,
+}));
 app.use(express.json());
 
 // Routes
