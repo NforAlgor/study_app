@@ -2,13 +2,20 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL || "http://localhost:5173",
-  process.env.FRONTEND_URL_2,
-].filter(Boolean);
+const FRONTEND_URL = process.env.FRONTEND_URL;
+const FRONTEND_URL_2 = process.env.FRONTEND_URL_2;
 
 app.use(cors({
-  origin: allowedOrigins.length > 0 ? allowedOrigins : true,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (FRONTEND_URL) {
+      const allowed = [FRONTEND_URL];
+      if (FRONTEND_URL_2) allowed.push(FRONTEND_URL_2);
+      if (allowed.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    }
+    return callback(null, true);
+  },
   credentials: true,
 }));
 app.use(express.json());
