@@ -1,23 +1,14 @@
 const express = require("express");
 const app = express();
-const cors = require("cors");
 
-const FRONTEND_URL = process.env.FRONTEND_URL;
-const FRONTEND_URL_2 = process.env.FRONTEND_URL_2;
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (FRONTEND_URL) {
-      const allowed = [FRONTEND_URL];
-      if (FRONTEND_URL_2) allowed.push(FRONTEND_URL_2);
-      if (allowed.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
-    }
-    return callback(null, true);
-  },
-  credentials: true,
-}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 app.use(express.json());
 
 // Routes
