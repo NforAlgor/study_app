@@ -40,6 +40,6 @@ CREATE TABLE IF NOT EXISTS push_subscriptions (
 );
 
 -- ── Indexes ───────────────────────────────────────────────
-CREATE INDEX IF NOT EXISTS idx_tasks_user_id     ON tasks(user_id);
-CREATE INDEX IF NOT EXISTS idx_tasks_deadline    ON tasks(deadline);
-CREATE INDEX IF NOT EXISTS idx_push_user_id      ON push_subscriptions(user_id);
+CREATE INDEX idx_tasks_user_id     ON tasks(user_id);
+CREATE INDEX idx_tasks_deadline    ON tasks(deadline);
+CREATE INDEX idx_push_user_id      ON push_subscriptions(user_id);
