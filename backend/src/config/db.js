@@ -1,11 +1,19 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 
+function getCaCert() {
+  if (process.env.DB_CA_CERT_PATH) {
+    return require("fs").readFileSync(process.env.DB_CA_CERT_PATH, "utf8");
+  }
+  if (process.env.DB_CA_CERT) {
+    return process.env.DB_CA_CERT.replace(/\\n/g, "\n");
+  }
+  return undefined;
+}
+
 const sslConfig =
   process.env.DB_SSL === "true"
-    ? process.env.DB_CA_CERT
-      ? { ca: process.env.DB_CA_CERT.replace(/\\n/g, "\n"), rejectUnauthorized: true }
-      : { rejectUnauthorized: true }
+    ? { ca: getCaCert(), rejectUnauthorized: true }
     : undefined;
 
 const db = mysql.createPool({

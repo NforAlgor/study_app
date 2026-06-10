@@ -1,5 +1,5 @@
 services:
-  # ── Backend API (Web Service) ─────────────────────
+  # ── Backend API (Render Web Service) ──────────────
   - type: web
     name: study-planner-api
     env: node
@@ -13,25 +13,29 @@ services:
         value: production
       - key: PORT
         value: "5000"
+
+      # ── Aiven MySQL (set these in Render Dashboard) ──
       - key: DB_HOST
-        value: your-mysql-host  # Use a provider like Aiven, PlanetScale, or Railway
+        sync: false
       - key: DB_PORT
-        value: "3306"
+        sync: false
       - key: DB_USER
-        value: your-db-user
+        sync: false
       - key: DB_PASSWORD
-        value: your-db-password
+        sync: false
       - key: DB_NAME
-        value: smart_study_planner
+        sync: false
       - key: DB_SSL
         value: "true"
+      - key: DB_CA_CERT
+        sync: false   # paste your Aiven CA.pem content here
+
       - key: JWT_SECRET
         generateValue: true
+
       - key: FRONTEND_URL
-        fromService:
-          type: web
-          name: study-planner
-          envVarKey: RENDER_EXTERNAL_URL
+        sync: false   # set to your Vercel URL: https://your-app.vercel.app
+
       - key: VAPID_PUBLIC_KEY
         sync: false
       - key: VAPID_PRIVATE_KEY
@@ -46,18 +50,3 @@ services:
         sync: false
       - key: EMAIL_FROM
         sync: false
-
-  # ── Frontend Static Site ──────────────────────────
-  - type: web
-    name: study-planner
-    env: static
-    region: oregon
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    pullRequestPreviewsEnabled: true
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: study-planner-api
-          envVarKey: RENDER_EXTERNAL_URL
